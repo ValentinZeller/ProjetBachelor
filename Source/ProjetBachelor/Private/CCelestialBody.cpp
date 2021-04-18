@@ -26,12 +26,14 @@ ACCelestialBody::ACCelestialBody()
 void ACCelestialBody::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	//Récupération de la static mesh pour paramétrer la physique et enlever la gravité de base
 	if (this->FindComponentByClass<UStaticMeshComponent>()) {
 		Mesh = this->FindComponentByClass<UStaticMeshComponent>();
 		Mesh->SetSimulatePhysics(true);
 		Mesh->SetEnableGravity(false);
 
+		//Lancement du corps céleste
 		if (!bIsLaunched) {
 			Mesh->AddForce(m_fInitialDirection * m_fInitialSpeed);
 			bIsLaunched = true;
@@ -39,7 +41,6 @@ void ACCelestialBody::BeginPlay()
 		
 	}
 	
-
 }
 
 // Called every frame
@@ -47,24 +48,44 @@ void ACCelestialBody::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	//Lancement du corps céleste
 	if (!bIsLaunched) {
+		if (!IsValid(Mesh))
+		{
+			if (this->FindComponentByClass<UStaticMeshComponent>()) {
+				Mesh = this->FindComponentByClass<UStaticMeshComponent>();
+				Mesh->SetSimulatePhysics(true);
+				Mesh->SetEnableGravity(false);
+			}
+		}
 		Mesh->AddForce(m_fInitialDirection * m_fInitialSpeed);
 		bIsLaunched = true;
-	} else {
 
-		TArray<AActor*> SpaceActors;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACCelestialBody::StaticClass(), SpaceActors);
+	} else {
+		//S'il a été lancé, prendre en compte l'influence des autres corps célestes pour modifier la trajectoire
+
+		TArray<AActor*> SpaceActors; //Tableau stockant les corps célestes
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACCelestialBody::StaticClass(), SpaceActors); //On récupére les corps célestes
 		for (AActor* SpaceActor : SpaceActors) {
+			//Pour chaque corp céleste du tableau, on récupère le primitive component
 			UPrimitiveComponent* SpacePrimitive = SpaceActor->FindComponentByClass<UPrimitiveComponent>();
-			if (SpacePrimitive->IsSimulatingPhysics()) {
-				SpacePrimitive->AddForce(GetDirection(SpacePrimitive) * GetDistanceBetweenBodies(SpaceActor) * GetBodyMass(SpacePrimitive) * m_fMultiply);
+
+			if (IsValid(SpacePrimitive)) {
+				if (SpacePrimitive->IsSimulatingPhysics()) {
+					//On vérifie qu'il simule la physique et on change la trajectoire à partir des différents paramètres :
+					//La direction, la distance entre les deux corps célestes, la masse et le facteur multipliant
+					SpacePrimitive->AddForce(GetDirection(SpacePrimitive) * GetDistanceBetweenBodies(SpaceActor) * GetBodyMass(SpacePrimitive) * m_fMultiply);
+				}
 			}
+
 		}
 	}
 
 }
 
 float ACCelestialBody::GetDistanceBetweenBodies(AActor* SpaceActor)
+//Récupère la distance entre les deux corps célestes et applique la constante de gravité
 {
 	float fDistance = 0;
 	if (SpaceActor != this) {
@@ -74,6 +95,7 @@ float ACCelestialBody::GetDistanceBetweenBodies(AActor* SpaceActor)
 }
 
 float ACCelestialBody::GetBodyMass(UPrimitiveComponent* SpacePrimitive)
+//Récupère la masse du corp céleste
 {
 	float fMass = 0;
 	fMass = SpacePrimitive->GetMass() * SpacePrimitive->GetMassScale();
@@ -81,11 +103,20 @@ float ACCelestialBody::GetBodyMass(UPrimitiveComponent* SpacePrimitive)
 }
 
 FVector ACCelestialBody::GetDirection(UPrimitiveComponent* SpacePrimitive)
+//Récupère la direction du corps céleste
 {
 	FVector vDirection = FVector(0);
 
 	vDirection = this->FindComponentByClass<UPrimitiveComponent>()->GetComponentLocation() - SpacePrimitive->GetComponentLocation();
 	
 	return vDirection;
+}
+
+void ACCelestialBody::Initialize(float multiply, float speed, FVector direction)
+{
+	m_fMultiply = multiply;
+	m_fInitialSpeed = speed;
+	m_fInitialDirection = direction;
+	bIsLaunched = false;
 }
 

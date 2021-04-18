@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/SphereComponent.h"
 #include "CCelestialBody.generated.h"
 
 
@@ -18,16 +19,16 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float m_fInitialSpeed;
+	float m_fInitialSpeed; //Vitesse initiale
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	FVector m_fInitialDirection;
+	FVector m_fInitialDirection; // Direction initiale
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float m_fMultiply;
+	float m_fMultiply; // Facteur multipliant l'influence gravitationnel
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsLaunched;
+	bool bIsLaunched; // Etat lancé
 
 	UStaticMeshComponent* Mesh;
 
@@ -40,4 +41,5 @@ public:
 	float GetDistanceBetweenBodies(AActor* SpaceActor);
 	float GetBodyMass(UPrimitiveComponent* SpacePrimitive);
 	FVector GetDirection(UPrimitiveComponent* SpacePrimitive);
+	void Initialize(float multiply, float speed, FVector direction);
 };
