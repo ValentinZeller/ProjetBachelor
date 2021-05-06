@@ -17,6 +17,7 @@ ACAPlayerPawn::ACAPlayerPawn()
 	m_bIsFreeView = false;
 	m_Spawned = nullptr;
 	m_bIsSpeedChangeable = false;
+	bHasSpawned = false;
 
 	//Création des components et de la hierarchie pour le blueprint
 
@@ -156,7 +157,7 @@ void ACAPlayerPawn::Launch()
 		m_bIsSpeedChangeable = false;
 
 		//Si un corps celeste a déjà été spawn, le supprimer
-		if (IsValid(m_Spawned)) {
+		if (IsValid(m_Spawned) && bDestroySpawned) {
 			m_Spawned->Destroy();
 		}
 
@@ -170,19 +171,31 @@ void ACAPlayerPawn::Launch()
 		//Spawn du corps céleste et initialisation
 		m_Spawned = GetWorld()->SpawnActor<ACCelestialBody>(SpawnedBP,GetActorLocation(),GetActorRotation(),SpawnInfo);
 		m_Spawned->Initialize(0.1, m_fInitialSpeed, GetActorForwardVector() * 2000);
+		m_Spawned->Tags.AddUnique(*this->GetName());
 		
 		//Mise en place du custom depth pour illuminer le corps celeste quand il est en bon orbite
 		UActorComponent* comp = m_Spawned->GetComponentByClass(UStaticMeshComponent::StaticClass());
 		UStaticMeshComponent* mesh = Cast<UStaticMeshComponent>(comp);
 		mesh->SetRenderCustomDepth(true);
+		mesh->SetMaterial(0, SpawnedMaterial);
 		
 		//Si la sphere est
 		if (IsValid(m_Sphere)) {
 			m_Sphere->SetVisibility(false);
 		}
+
 		
-		FTimerHandle UnusedHandle;
-		GetWorldTimerManager().SetTimer(UnusedHandle, this, &ACAPlayerPawn::AfterLaunchVisibility, 1, false);
+
+		if (bDestroySpawned)
+		{
+			FTimerHandle UnusedHandle;
+			GetWorldTimerManager().SetTimer(UnusedHandle, this, &ACAPlayerPawn::AfterLaunchVisibility, 1, false);
+
+		}
+		else {
+			m_bIsCharging = false;
+			bHasSpawned = true;
+		}
 	}
 }
 

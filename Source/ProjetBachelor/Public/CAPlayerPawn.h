@@ -40,6 +40,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USpringArmComponent* m_armComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UMaterialInterface* SpawnedMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bDestroySpawned;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bHasSpawned;
+
 
 public:	
 	//Type BP_CelestialBody pour le lancer
