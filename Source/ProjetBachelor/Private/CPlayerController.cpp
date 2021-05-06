@@ -8,13 +8,13 @@ void ACPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAxis("MoveForwardBackward",this,&ACPlayerController::MoveForwardBackward);
-	InputComponent->BindAxis("MoveRightLeft",this,&ACPlayerController::MoveRightLeft);
-	InputComponent->BindAxis("MoveUpDown",this,&ACPlayerController::MoveUpDown);
-	InputComponent->BindAxis("VerticalMovement",this,&ACPlayerController::VerticalMovement);
-	InputComponent->BindAxis("HorizontalMovement",this,&ACPlayerController::HorizontalMovement);
+	InputComponent->BindAxis("MoveForwardBackward", this, &ACPlayerController::MoveForwardBackward);
+	InputComponent->BindAxis("MoveRightLeft", this, &ACPlayerController::MoveRightLeft);
+	InputComponent->BindAxis("MoveUpDown", this, &ACPlayerController::MoveUpDown);
+	InputComponent->BindAxis("VerticalMovement", this, &ACPlayerController::VerticalMovement);
+	InputComponent->BindAxis("HorizontalMovement", this, &ACPlayerController::HorizontalMovement);
 
-	InputComponent->BindAction("ChangeCameraView", IE_Pressed,this, &ACPlayerController::ChangeCameraView);
+	InputComponent->BindAction("ChangeCameraView", IE_Pressed, this, &ACPlayerController::ChangeCameraView);
 	InputComponent->BindAction("Launch", IE_Released, this, &ACPlayerController::Launch);
 	InputComponent->BindAction("Launch", IE_Pressed, this, &ACPlayerController::Charging);
 	InputComponent->BindAction("StopAim", IE_Pressed, this, &ACPlayerController::StopAim);
@@ -111,5 +111,6 @@ void ACPlayerController::StopAim()
 		pawn->StopAim();
 	}
 }
+
 
 
