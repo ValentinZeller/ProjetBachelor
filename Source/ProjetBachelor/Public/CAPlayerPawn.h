@@ -17,47 +17,53 @@ class PROJETBACHELOR_API ACAPlayerPawn : public APawn
 	GENERATED_BODY()
 
 private:
-	
+	//Valeur scalaire pour les déplacements de la caméra libre
 	float m_fMovementMultiplier;
+	//Vitesse maximale
 	float m_fMaxSpeed;
+	//Vitesse changeable
+	bool m_bIsSpeedChangeable;
+	//Timer pour l'apparition du fantome de lancer
+	FTimerHandle ghostTimer;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
-
-	
-
+	//Caméra de viser/lancer
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UCameraComponent* m_AimCamera;
-
+	//Caméra libre
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UCameraComponent* m_FreeView;
-
+	//Spring Arm pour la caméra de viser
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USpringArmComponent* m_armComponent;
 
 
 public:	
+	//Type BP_CelestialBody pour le lancer
 	UPROPERTY(EditDefaultsOnly, Category = "ActorSpawning")
 		TSubclassOf<ACCelestialBody> SpawnedBP;
-
+	//Type BP_Ghost pour le fantome de lancer
+	UPROPERTY(EditDefaultsOnly, Category = "ActorSpawning")
+		TSubclassOf<ACCelestialBody> GhostBP;
+	
+	//Etat chargé
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool m_bIsCharging;
-
+	//Etat caméra libre
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool m_bIsFreeView;
-
-
+	//Vitesse initiale au lancer
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float m_fInitialSpeed;
-
+	//Référence de l'acteur spawné
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ACCelestialBody* m_Spawned;
-	
+	//Sphere du joueur servant de visuel
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UStaticMeshComponent* m_Sphere;
+	UStaticMeshComponent* m_Sphere;
 
 	// Sets default values for this pawn's properties
 	ACAPlayerPawn();
@@ -78,6 +84,9 @@ public:
 	void Charging();
 	void AfterLaunchVisibility();
 
+	UFUNCTION(BlueprintCallable)
 	float UpdateLaunchingSpeed(float value);
 	bool IsLaunching();
+
+	void LaunchGhost();
 };

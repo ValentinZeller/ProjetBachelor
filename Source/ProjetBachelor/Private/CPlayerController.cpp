@@ -22,7 +22,7 @@ void ACPlayerController::SetupInputComponent()
 
 void ACPlayerController::MoveForwardBackward(float value)
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{
@@ -32,7 +32,7 @@ void ACPlayerController::MoveForwardBackward(float value)
 
 void ACPlayerController::MoveRightLeft(float value)
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{
@@ -43,7 +43,7 @@ void ACPlayerController::MoveRightLeft(float value)
 
 void ACPlayerController::MoveUpDown(float value)
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{
@@ -53,7 +53,7 @@ void ACPlayerController::MoveUpDown(float value)
 
 void ACPlayerController::VerticalMovement(float value)
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{
@@ -63,7 +63,7 @@ void ACPlayerController::VerticalMovement(float value)
 
 void ACPlayerController::HorizontalMovement(float value)
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{
@@ -74,7 +74,7 @@ void ACPlayerController::HorizontalMovement(float value)
 
 void ACPlayerController::ChangeCameraView()
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{
@@ -84,7 +84,7 @@ void ACPlayerController::ChangeCameraView()
 
 void ACPlayerController::Launch()
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{
@@ -94,7 +94,7 @@ void ACPlayerController::Launch()
 
 void ACPlayerController::Charging()
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{
@@ -104,7 +104,7 @@ void ACPlayerController::Charging()
 
 void ACPlayerController::StopAim()
 {
-	auto pawn = Cast<ACAPlayerPawn>(this->GetPawn());
+	ACAPlayerPawn* pawn = Cast<ACAPlayerPawn>(this->GetPawn());
 
 	if (pawn)
 	{

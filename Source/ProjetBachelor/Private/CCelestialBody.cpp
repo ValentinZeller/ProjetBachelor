@@ -84,8 +84,8 @@ void ACCelestialBody::Tick(float DeltaTime)
 
 }
 
-float ACCelestialBody::GetDistanceBetweenBodies(AActor* SpaceActor)
 //Récupère la distance entre les deux corps célestes et applique la constante de gravité
+float ACCelestialBody::GetDistanceBetweenBodies(AActor* SpaceActor)
 {
 	float fDistance = 0;
 	if (SpaceActor != this) {
@@ -94,16 +94,16 @@ float ACCelestialBody::GetDistanceBetweenBodies(AActor* SpaceActor)
 	return fDistance;
 }
 
-float ACCelestialBody::GetBodyMass(UPrimitiveComponent* SpacePrimitive)
 //Récupère la masse du corp céleste
+float ACCelestialBody::GetBodyMass(UPrimitiveComponent* SpacePrimitive)
 {
 	float fMass = 0;
 	fMass = SpacePrimitive->GetMass() * SpacePrimitive->GetMassScale();
 	return fMass;
 }
 
-FVector ACCelestialBody::GetDirection(UPrimitiveComponent* SpacePrimitive)
 //Récupère la direction du corps céleste
+FVector ACCelestialBody::GetDirection(UPrimitiveComponent* SpacePrimitive)
 {
 	FVector vDirection = FVector(0);
 
@@ -112,6 +112,7 @@ FVector ACCelestialBody::GetDirection(UPrimitiveComponent* SpacePrimitive)
 	return vDirection;
 }
 
+//Initialisation des valeurs physiques du corps céleste
 void ACCelestialBody::Initialize(float multiply, float speed, FVector direction)
 {
 	m_fMultiply = multiply;
