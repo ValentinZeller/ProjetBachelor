@@ -18,6 +18,7 @@ ACAPlayerPawn::ACAPlayerPawn()
 	m_Spawned = nullptr;
 	m_bIsSpeedChangeable = false;
 	bHasSpawned = false;
+	m_bCanLaunch = true;
 
 	//Création des components et de la hierarchie pour le blueprint
 
@@ -151,8 +152,9 @@ void ACAPlayerPawn::ChangeCameraView()
 // Lancer un corps céleste
 void ACAPlayerPawn::Launch()
 {	
-	if (IsLaunching()) {
+	if (IsLaunching() && m_bCanLaunch == true) {
 
+		m_bCanLaunch = false;
 		//Vitesse non changeable temporairement
 		m_bIsSpeedChangeable = false;
 
@@ -185,17 +187,10 @@ void ACAPlayerPawn::Launch()
 		}
 
 		
+		FTimerHandle UnusedHandle;
+		GetWorldTimerManager().SetTimer(UnusedHandle, this, &ACAPlayerPawn::AfterLaunchVisibility, 1, false);
 
-		if (bDestroySpawned)
-		{
-			FTimerHandle UnusedHandle;
-			GetWorldTimerManager().SetTimer(UnusedHandle, this, &ACAPlayerPawn::AfterLaunchVisibility, 1, false);
-
-		}
-		else {
-			m_bIsCharging = false;
-			bHasSpawned = true;
-		}
+		
 	}
 }
 
@@ -224,8 +219,14 @@ void ACAPlayerPawn::Charging()
 // Après le lancer, rendre visible la sphere et état non chargé
 void ACAPlayerPawn::AfterLaunchVisibility()
 {
-	m_Sphere->SetVisibility(true);
 	m_bIsCharging = false;
+	m_bCanLaunch = true;
+	if (!bDestroySpawned) {
+		bHasSpawned = true;
+	}
+	else {
+		m_Sphere->SetVisibility(true);
+	}
 }
 
 // Mettre à jour la vitesse initiale de lancer
@@ -248,15 +249,18 @@ bool ACAPlayerPawn::IsLaunching()
 // Lancer de fantome
 void ACAPlayerPawn::LaunchGhost()
 {
-	ACCelestialBody* m_Ghost;
+	if (m_Sphere->IsVisible()) {
+		ACCelestialBody* m_Ghost;
 
-	//Information de Spawn : toujours, peut importe les collisions
-	FActorSpawnParameters SpawnInfo;
-	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	//Spawn du fantome et initialisation
-	m_Ghost = GetWorld()->SpawnActor<ACCelestialBody>(GhostBP, GetActorLocation(), GetActorRotation(), SpawnInfo);
-	m_Ghost->Initialize(0.1, m_fInitialSpeed, GetActorForwardVector() * 2000);
+		//Information de Spawn : toujours, peut importe les collisions
+		FActorSpawnParameters SpawnInfo;
+		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		//Spawn du fantome et initialisation
+		m_Ghost = GetWorld()->SpawnActor<ACCelestialBody>(GhostBP, GetActorLocation(), GetActorRotation(), SpawnInfo);
+		m_Ghost->Initialize(0.1, m_fInitialSpeed, GetActorForwardVector() * 2000);
 
-	m_Ghost->SetLifeSpan(4);
+		m_Ghost->SetLifeSpan(4);
+	}
+
 }
 

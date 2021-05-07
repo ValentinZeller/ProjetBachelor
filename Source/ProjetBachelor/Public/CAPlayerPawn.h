@@ -26,6 +26,8 @@ private:
 	//Timer pour l'apparition du fantome de lancer
 	FTimerHandle ghostTimer;
 
+	bool m_bCanLaunch;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
