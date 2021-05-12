@@ -41,5 +41,7 @@ public:
 	float GetDistanceBetweenBodies(AActor* SpaceActor);
 	float GetBodyMass(UPrimitiveComponent* SpacePrimitive);
 	FVector GetDirection(UPrimitiveComponent* SpacePrimitive);
+
+	UFUNCTION(BlueprintCallable)
 	void Initialize(float multiply, float speed, FVector direction);
 };

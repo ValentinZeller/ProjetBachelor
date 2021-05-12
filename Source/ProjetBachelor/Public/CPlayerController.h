@@ -24,4 +24,6 @@ class PROJETBACHELOR_API ACPlayerController : public APlayerController
 	void Launch();
 	void Charging();
 	void StopAim();
+
+	void ReturnToMenu();
 };

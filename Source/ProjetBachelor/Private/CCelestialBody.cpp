@@ -2,9 +2,9 @@
 
 
 #include "CCelestialBody.h"
-#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Kismet/GameplayStatics.h"
 
-#define GRAVITY 269.976532
+#define GRAVITY 169.976532
 
 // Sets default values
 ACCelestialBody::ACCelestialBody()
@@ -27,6 +27,7 @@ void ACCelestialBody::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Initialize(m_fMultiply, m_fInitialSpeed, m_fInitialDirection);
 	//Récupération de la static mesh pour paramétrer la physique et enlever la gravité de base
 	if (this->FindComponentByClass<UStaticMeshComponent>()) {
 		Mesh = this->FindComponentByClass<UStaticMeshComponent>();
@@ -69,9 +70,10 @@ void ACCelestialBody::Tick(float DeltaTime)
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACCelestialBody::StaticClass(), SpaceActors); //On récupére les corps célestes
 		for (AActor* SpaceActor : SpaceActors) {
 			//Pour chaque corp céleste du tableau, on récupère le primitive component
-			UPrimitiveComponent* SpacePrimitive = SpaceActor->FindComponentByClass<UPrimitiveComponent>();
+			UPrimitiveComponent* SpacePrimitive = SpaceActor->FindComponentByClass<UStaticMeshComponent>();
 
 			if (IsValid(SpacePrimitive)) {
+
 				if (SpacePrimitive->IsSimulatingPhysics()) {
 					//On vérifie qu'il simule la physique et on change la trajectoire à partir des différents paramètres :
 					//La direction, la distance entre les deux corps célestes, la masse et le facteur multipliant

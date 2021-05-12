@@ -3,6 +3,7 @@
 
 #include "CPlayerController.h"
 #include "CAPlayerPawn.h"
+#include "Kismet/GameplayStatics.h"
 
 void ACPlayerController::SetupInputComponent()
 {
@@ -18,6 +19,7 @@ void ACPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Launch", IE_Released, this, &ACPlayerController::Launch);
 	InputComponent->BindAction("Launch", IE_Pressed, this, &ACPlayerController::Charging);
 	InputComponent->BindAction("StopAim", IE_Pressed, this, &ACPlayerController::StopAim);
+	InputComponent->BindAction("ReturnToMenu", IE_Pressed, this, &ACPlayerController::ReturnToMenu);
 }
 
 void ACPlayerController::MoveForwardBackward(float value)
@@ -110,6 +112,12 @@ void ACPlayerController::StopAim()
 	{
 		pawn->StopAim();
 	}
+}
+
+void ACPlayerController::ReturnToMenu()
+{
+	UE_LOG(LogTemp, Warning, TEXT("test"));
+	UGameplayStatics::OpenLevel(GetWorld(), "StartMenu");
 }
 
 

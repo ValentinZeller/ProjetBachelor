@@ -96,7 +96,7 @@ void ACAPlayerPawn::MoveUpDown(float value)
 // Mouvement vertical pour tourner la caméra ou initialiser la vitesse initiale de lancer
 void ACAPlayerPawn::VerticalMovement(float value)
 {
-	if (!m_bIsCharging) {
+	if (!m_bIsCharging && (m_bIsFreeView == false)) {
 		AddControllerPitchInput(value);
 	}
 	else {
@@ -172,7 +172,7 @@ void ACAPlayerPawn::Launch()
 
 		//Spawn du corps céleste et initialisation
 		m_Spawned = GetWorld()->SpawnActor<ACCelestialBody>(SpawnedBP,GetActorLocation(),GetActorRotation(),SpawnInfo);
-		m_Spawned->Initialize(0.1, m_fInitialSpeed, GetActorForwardVector() * 2000);
+		m_Spawned->Initialize(0.5, m_fInitialSpeed, GetActorForwardVector() * 2000);
 		m_Spawned->Tags.AddUnique(*this->GetName());
 		
 		//Mise en place du custom depth pour illuminer le corps celeste quand il est en bon orbite
