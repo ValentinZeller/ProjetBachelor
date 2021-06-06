@@ -33,7 +33,7 @@ void ACCelestialBody::BeginPlay()
 		Mesh = this->FindComponentByClass<UStaticMeshComponent>();
 		Mesh->SetSimulatePhysics(true);
 		Mesh->SetEnableGravity(false);
-
+		UE_LOG(LogTemp,Warning,TEXT("%s"),*Mesh->GetName())
 		//Lancement du corps céleste
 		if (!bIsLaunched) {
 			Mesh->AddForce(m_fInitialDirection * m_fInitialSpeed);
